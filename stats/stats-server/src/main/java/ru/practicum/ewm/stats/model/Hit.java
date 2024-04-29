@@ -7,8 +7,11 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter @Setter @Builder
-@Entity @Table(name = "hits")
+@Getter
+@Setter
+@Builder
+@Entity
+@Table(name = "hits")
 public class Hit {
 
     @Id
