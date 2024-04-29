@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StatsController {
 
-    private final StatsServiceImpl statsService;
+    private final StatsService statsService;
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
