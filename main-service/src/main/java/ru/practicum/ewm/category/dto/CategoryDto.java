@@ -17,7 +17,8 @@ public class CategoryDto {
     public static final int NAME_MIN_LENGTH = 1;
     public static final int NAME_MAX_LENGTH = 50;
     public static final String NAME_SIZE_ERROR_MESSAGE = "Category name length must be between " + NAME_MIN_LENGTH
-            + " and " + NAME_MAX_LENGTH;
+            + " and " + NAME_MAX_LENGTH + ".";
+
     public static final String NAME_BLANK_ERROR_MESSAGE = "Category name should not be blank";
 
     private Long id;
