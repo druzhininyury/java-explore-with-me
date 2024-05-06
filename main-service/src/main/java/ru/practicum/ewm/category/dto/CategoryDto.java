@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
@@ -17,9 +18,11 @@ public class CategoryDto {
     public static final int NAME_MAX_LENGTH = 50;
     public static final String NAME_SIZE_ERROR_MESSAGE = "Category name length must be between " + NAME_MIN_LENGTH
             + " and " + NAME_MAX_LENGTH;
+    public static final String NAME_BLANK_ERROR_MESSAGE = "Category name should not be blank";
 
     private Long id;
 
+    @NotBlank(message = NAME_BLANK_ERROR_MESSAGE)
     @Size(min = NAME_MIN_LENGTH, max = NAME_MAX_LENGTH, message = NAME_SIZE_ERROR_MESSAGE)
     private String name;
 }
