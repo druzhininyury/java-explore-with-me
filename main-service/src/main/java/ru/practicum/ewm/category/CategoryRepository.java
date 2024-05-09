@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
+    boolean existsAllByIdIn(List<Long> categoriesIds);
+
 }

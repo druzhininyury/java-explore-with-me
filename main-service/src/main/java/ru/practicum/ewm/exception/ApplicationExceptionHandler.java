@@ -37,6 +37,22 @@ public class ApplicationExceptionHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleValidationException(ValidationException e) {
+        ApiError apiError = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList()))
+                .message(e.getMessage())
+                .reason("Request is invalid.")
+                .status(HttpStatus.BAD_REQUEST)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        log.info("Invalid request. " + apiError.getMessage());
+
+        return apiError;
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         ApiError apiError = ApiError.builder()
@@ -64,6 +80,38 @@ public class ApplicationExceptionHandler {
                 .build();
 
         log.info("Entity wasn't found. " + apiError.getMessage());
+
+        return apiError;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleEntityNotAccessibleException(EntityNotAccessibleException e) {
+        ApiError apiError = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList()))
+                .message(e.getMessage())
+                .reason("The required object is not accessible.")
+                .status(HttpStatus.NOT_FOUND)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        log.info("Entity is not accessible. " + apiError.getMessage());
+
+        return apiError;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleConditionsException(ConditionsException e) {
+        ApiError apiError = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList()))
+                .message(e.getMessage())
+                .reason("For the requested operation the conditions are not met.")
+                .status(HttpStatus.CONFLICT)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        log.info("Requested operation conditions are not met. " + apiError.getMessage());
 
         return apiError;
     }
