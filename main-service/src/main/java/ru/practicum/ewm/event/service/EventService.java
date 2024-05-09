@@ -42,4 +42,12 @@ public interface EventService {
                                   int size,
                                   HttpServletRequest request);
 
+    Long getEventViewsNumber(Long eventId);
+
+    // Заглушка
+    List<EventShortDto> loadShortEventsViewsNumber(List<EventShortDto> dtos);
+
+    // Заглушка
+    List<EventFullDto> loadFullEventsViewsNumber(List<EventFullDto> dtos);
+
 }

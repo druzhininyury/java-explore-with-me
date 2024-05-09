@@ -284,12 +284,14 @@ public class EventServiceImpl implements EventService {
     }
 
     // Заглушка
-    private Long getEventViewsNumber(Long eventId) {
+    @Override
+    public Long getEventViewsNumber(Long eventId) {
         return 0L;
     }
 
     // Заглушка
-    private List<EventShortDto> loadShortEventsViewsNumber(List<EventShortDto> dtos) {
+    @Override
+    public List<EventShortDto> loadShortEventsViewsNumber(List<EventShortDto> dtos) {
         for (EventShortDto dto : dtos) {
             dto.setViews(0L);
         }
@@ -297,7 +299,8 @@ public class EventServiceImpl implements EventService {
     }
 
     // Заглушка
-    private List<EventFullDto> loadFullEventsViewsNumber(List<EventFullDto> dtos) {
+    @Override
+    public List<EventFullDto> loadFullEventsViewsNumber(List<EventFullDto> dtos) {
         for (EventFullDto dto : dtos) {
             dto.setViews(0L);
         }
