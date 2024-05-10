@@ -36,7 +36,7 @@ public class NewEventDto {
     public static final String EVENT_DATE_NULL_ERROR_MESSAGE = "Event date must be provided.";
     public static final int EVENT_DATE_TIME_RESERVE_HOURS = 2;
     public static final String EVENT_DATE_TOO_EARLY_ERROR_MESSAGE = "Event date must be "
-        + EVENT_DATE_TIME_RESERVE_HOURS +" hour(s) later then now.";
+        + EVENT_DATE_TIME_RESERVE_HOURS + " hour(s) later then now.";
 
     public static final String LOCATION_NULL_ERROR_MESSAGE = "Event location must be provided.";
 

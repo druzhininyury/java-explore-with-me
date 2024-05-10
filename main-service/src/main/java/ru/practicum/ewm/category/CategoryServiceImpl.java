@@ -39,6 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("Deleted category with id={}", categoryId);
         categoryRepository.deleteById(categoryId);
     }
+
     @Transactional
     public CategoryDto updateCategory(long categoryId, NewCategoryDto newCategoryDto) {
         if (!categoryRepository.existsById(categoryId)) {

@@ -322,7 +322,7 @@ public class EventServiceImpl implements EventService {
     private Map<Long, Long> getViewForEvents(List<Long> eventsIds) {
         List<String> uris = eventsIds.stream().map(id -> "/events/" + id).collect(Collectors.toList());
 
-        log.info("Send get views request for events ids: {}." , eventsIds);
+        log.info("Send get views request for events ids: {}.", eventsIds);
         List<ViewStats> viewsStats = statsClient.getStats(null, null, uris, true);
 
         Map<Long, Long> eventsViews = viewsStats.stream()

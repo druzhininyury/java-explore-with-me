@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class RequestServiceImpl implements RequestService{
+public class RequestServiceImpl implements RequestService {
 
     private final RequestMapper requestMapper;
 
@@ -99,11 +99,11 @@ public class RequestServiceImpl implements RequestService{
         }
 
         if (request.getState().equals(Request.State.CANCELED)) {
-            throw new ConditionsException("Can't cancel already canceled request(id=" + requestId +").");
+            throw new ConditionsException("Can't cancel already canceled request(id=" + requestId + ").");
         }
 
         if (request.getState().equals(Request.State.REJECTED)) {
-            throw new ConditionsException("Can't cancel already rejected request(id=" + requestId +").");
+            throw new ConditionsException("Can't cancel already rejected request(id=" + requestId + ").");
         }
 
         if (request.getState().equals(Request.State.CONFIRMED)) {
@@ -148,7 +148,7 @@ public class RequestServiceImpl implements RequestService{
         Event event = eventContainer.get();
 
         if (userId != event.getInitiator().getId()) {
-            throw new ConditionsException("User(id=" + userId + ") is not initiator of of event(id=" + eventId +").");
+            throw new ConditionsException("User(id=" + userId + ") is not initiator of of event(id=" + eventId + ").");
         }
 
         if (eventRequestStatusUpdateRequest.getStatus().equals(EventRequestStatusUpdateRequest.State.CONFIRMED) &&
@@ -165,7 +165,7 @@ public class RequestServiceImpl implements RequestService{
                 .map(Request::getId).collect(Collectors.toList());
         if (!badRequest.isEmpty()) {
             throw new ConditionsException("Can't update requests statuses, some request are not for event(id=" +
-                    eventId +"). Invalid requests ids: " + badRequest);
+                    eventId + "). Invalid requests ids: " + badRequest);
         }
 
         badRequest = requests.stream().filter(request -> !request.getState().equals(Request.State.PENDING))
