@@ -19,8 +19,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "where ((:usersIds) is null or event.initiator.id in (:usersIds)) " +
             "and ((:eventsStates) is null or event.state in (:eventsStates)) " +
             "and ((:categoriesIds) is null or event.category.id in (:categoriesIds)) " +
-            "and (:rangeStart is null or event.eventDate >= :rangeStart) " +
-            "and (:rangeEnd is null or event.eventDate <= :rangeEnd) ")
+            "and (cast(:rangeStart as timestamp) is null or event.eventDate >= :rangeStart) " +
+            "and (cast(:rangeEnd as timestamp) is null or event.eventDate <= :rangeEnd) ")
     List<Event> findAllWithFilters(@Param("usersIds") List<Long> usersIds,
                                    @Param("eventsStates") List<Event.State> eventsStates,
                                    @Param("categoriesIds") List<Long> categoriesIds,
@@ -35,8 +35,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
            " or lower(event.description) like lower(concat('%', :text, '%'))) " +
            "and ((:categoriesIds) is null or event.category.id in (:categoriesIds)) " +
            "and (:paid is null or event.paid = :paid) " +
-           "and (:rangeStart is null or event.eventDate >= :rangeStart) " +
-           "and (:rangeEnd is null or event.eventDate <= :rangeEnd) " +
+           "and (cast(:rangeStart as timestamp) is null or event.eventDate >= :rangeStart) " +
+           "and (cast(:rangeEnd as timestamp) is null or event.eventDate <= :rangeEnd) " +
            "and (:onlyAvailable = false or event.participantLimit = 0 or event.confirmedRequests < event.participantLimit) ")
     List<Event> findAllWithFilters(@Param("state") Event.State state,
                                    @Param("text") String text,
