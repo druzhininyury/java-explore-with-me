@@ -27,7 +27,7 @@ public class StatsServiceImpl implements StatsService {
     public EndpointHit saveHit(EndpointHit endpointHit) {
         try {
             Hit hit = statsRepository.save(hitMapper.toHit(endpointHit));
-            log.info("Added hit: {}", endpointHit);
+            log.info("Added hit: {}", hit);
             return hitMapper.toEndpointHit(hit);
         } catch (DataIntegrityViolationException e) {
             throw new EntityHasNotSavedException("Hit hasn't been saved: " + endpointHit);
@@ -36,16 +36,8 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        List<ViewStats> stats;
-        if (!unique && uris == null) {
-            stats = statsRepository.getStats(start, end);
-        } else if (unique && uris == null) {
-            stats = statsRepository.getStatsUnique(start, end);
-        } else if (!unique) {
-            stats = statsRepository.getStatsWithUris(start, end, uris);
-        } else {
-            stats = statsRepository.getStatsUniqueWithUris(start, end, uris);
-        }
+        List<ViewStats> stats = unique ? statsRepository.getStatsUniqueWithFilters(start, end, uris) :
+                statsRepository.getStatsWithFilters(start, end, uris);
         log.info("Stats sent for request: start={} end={} uris={} unique={}", start, end, uris, unique);
         return stats;
     }

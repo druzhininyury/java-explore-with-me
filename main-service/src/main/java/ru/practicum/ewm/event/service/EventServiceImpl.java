@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.category.CategoryRepository;
 import ru.practicum.ewm.category.model.Category;
+import ru.practicum.ewm.client.stats.StatsClient;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.mapping.EventMapper;
 import ru.practicum.ewm.event.model.Event;
@@ -33,6 +34,8 @@ import java.util.stream.Collectors;
 public class EventServiceImpl implements EventService {
 
     private final EventMapper eventMapper;
+
+    private final StatsClient statsClient;
 
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;

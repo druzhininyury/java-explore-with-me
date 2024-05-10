@@ -10,38 +10,28 @@ import ru.practicum.ewm.stats.model.Hit;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface StatsRepository extends JpaRepository<Hit, Long>, JpaSpecificationExecutor<Hit> {
+public interface StatsRepository extends JpaRepository<Hit, Long> {
 
     @Query("select new ru.practicum.ewm.dto.stats.ViewStats(hit.app, hit.uri, count(hit.id) as counter) " +
            "from Hit as hit " +
-           "where hit.timestamp between :start and :end " +
+           "where (:start is null or hit.timestamp >= :start) " +
+           "and (:end is null or hit.timestamp <= :end) " +
+           "and ((:uris) is null or hit.uri in (:uris)) " +
            "group by hit.app, hit.uri " +
            "order by counter desc")
-    List<ViewStats> getStats(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    List<ViewStats> getStatsWithFilters(@Param("start") LocalDateTime start,
+                                        @Param("end") LocalDateTime end,
+                                        @Param("uris") List<String> uris);
 
     @Query("select new ru.practicum.ewm.dto.stats.ViewStats(hit.app, hit.uri, count(distinct(hit.ip)) as counter) " +
             "from Hit as hit " +
-            "where hit.timestamp between :start and :end " +
+            "where (:start is null or hit.timestamp >= :start) " +
+            "and (:end is null or hit.timestamp <= :end) " +
+            "and ((:uris) is null or hit.uri in (:uris)) " +
             "group by hit.app, hit.uri " +
             "order by counter desc")
-    List<ViewStats> getStatsUnique(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
-
-    @Query("select new ru.practicum.ewm.dto.stats.ViewStats(hit.app, hit.uri, count(hit.id) as counter) " +
-            "from Hit as hit " +
-            "where (hit.timestamp between :start and :end) and hit.uri in :uris " +
-            "group by hit.app, hit.uri " +
-            "order by counter desc")
-    List<ViewStats> getStatsWithUris(@Param("start") LocalDateTime start,
-                                     @Param("end") LocalDateTime end,
-                                     @Param("uris") List<String> uris);
-
-    @Query("select new ru.practicum.ewm.dto.stats.ViewStats(hit.app, hit.uri, count(distinct(hit.ip)) as counter) " +
-            "from Hit as hit " +
-            "where (hit.timestamp between :start and :end) and hit.uri in :uris " +
-            "group by hit.app, hit.uri " +
-            "order by counter desc")
-    List<ViewStats> getStatsUniqueWithUris(@Param("start") LocalDateTime start,
-                                           @Param("end") LocalDateTime end,
-                                           @Param("uris") List<String> uris);
+    List<ViewStats> getStatsUniqueWithFilters(@Param("start") LocalDateTime start,
+                                              @Param("end") LocalDateTime end,
+                                              @Param("uris") List<String> uris);
 
 }

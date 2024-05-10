@@ -23,10 +23,11 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public List<ViewStats> getStats(@RequestParam @DateTimeFormat(pattern = EndpointHit.DATE_TIME_FORMAT) LocalDateTime start,
-                              @RequestParam @DateTimeFormat(pattern = EndpointHit.DATE_TIME_FORMAT) LocalDateTime end,
-                              @RequestParam(required = false) List<String> uris,
-                              @RequestParam(defaultValue = "false") boolean unique) {
+    public List<ViewStats> getStats(
+            @RequestParam(required = false) @DateTimeFormat(pattern = EndpointHit.DATE_TIME_FORMAT) LocalDateTime start,
+            @RequestParam(required = false) @DateTimeFormat(pattern = EndpointHit.DATE_TIME_FORMAT) LocalDateTime end,
+            @RequestParam(required = false) List<String> uris,
+            @RequestParam(defaultValue = "false") boolean unique) {
         return statsService.getStats(start, end, uris, unique);
     }
 }

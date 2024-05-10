@@ -3,6 +3,7 @@ package ru.practicum.ewm.stats.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "hits")
+@ToString
 public class Hit {
 
     @Id
