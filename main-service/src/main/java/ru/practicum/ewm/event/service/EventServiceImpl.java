@@ -2,6 +2,7 @@ package ru.practicum.ewm.event.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.category.CategoryRepository;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.client.stats.StatsClient;
+import ru.practicum.ewm.dto.stats.ViewStats;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.mapping.EventMapper;
 import ru.practicum.ewm.event.model.Event;
@@ -23,9 +25,7 @@ import ru.practicum.ewm.user.model.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +35,7 @@ public class EventServiceImpl implements EventService {
 
     private final EventMapper eventMapper;
 
+    private final Environment environment;
     private final StatsClient statsClient;
 
     private final EventRepository eventRepository;
@@ -286,33 +287,56 @@ public class EventServiceImpl implements EventService {
         return dtos;
     }
 
-    // Заглушка
     @Override
     public Long getEventViewsNumber(Long eventId) {
-        return 0L;
+        Map<Long, Long> eventViews = getViewForEvents(List.of(eventId));
+        return eventViews.get(eventId);
     }
 
-    // Заглушка
     @Override
     public List<EventShortDto> loadShortEventsViewsNumber(List<EventShortDto> dtos) {
+        Map<Long, Long> eventsViews = getViewForEvents(dtos.stream().map(EventShortDto::getId).collect(Collectors.toList()));
         for (EventShortDto dto : dtos) {
-            dto.setViews(0L);
+            dto.setViews(eventsViews.get(dto.getId()));
         }
         return dtos;
     }
 
-    // Заглушка
     @Override
     public List<EventFullDto> loadFullEventsViewsNumber(List<EventFullDto> dtos) {
+        Map<Long, Long> eventsViews = getViewForEvents(dtos.stream().map(EventFullDto::getId).collect(Collectors.toList()));
         for (EventFullDto dto : dtos) {
-            dto.setViews(0L);
+            dto.setViews(eventsViews.get(dto.getId()));
         }
         return dtos;
     }
 
-    // Заглушка
     private void sendStats(HttpServletRequest request) {
-        // do nothing yet
+        log.info("Send hit for {}", request.getRequestURI());
+        statsClient.saveHitSync(environment.getProperty("application.name"),
+                                 request.getRequestURI(),
+                                 request.getRemoteAddr(),
+                                 LocalDateTime.now());
+    }
+
+    private Map<Long, Long> getViewForEvents(List<Long> eventsIds) {
+        List<String> uris = eventsIds.stream().map(id -> "/events/" + id).collect(Collectors.toList());
+
+        log.info("Send get views request for events ids: {}." , eventsIds);
+        List<ViewStats> viewsStats = statsClient.getStats(null, null, uris, true);
+
+        Map<Long, Long> eventsViews = viewsStats.stream()
+                .collect(Collectors.toMap(
+                        viewStats -> Long.parseLong(viewStats.getUri().substring(viewStats.getUri().lastIndexOf("/") + 1)),
+                        ViewStats::getHits));
+
+        for (Long eventId : eventsIds) {
+            if (!eventsViews.containsKey(eventId)) {
+                eventsViews.put(eventId, 0L);
+            }
+        }
+
+        return eventsViews;
     }
 
 }

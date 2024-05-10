@@ -16,9 +16,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("select event " +
             "from Event event " +
-            "where (:usersIds is null or event.initiator.id in :usersIds) " +
-            "and (:eventsStates is null or event.state in :eventsStates) " +
-            "and (:categoriesIds is null or event.category.id in :categoriesIds) " +
+            "where ((:usersIds) is null or event.initiator.id in (:usersIds)) " +
+            "and ((:eventsStates) is null or event.state in (:eventsStates)) " +
+            "and ((:categoriesIds) is null or event.category.id in (:categoriesIds)) " +
             "and (:rangeStart is null or event.eventDate >= :rangeStart) " +
             "and (:rangeEnd is null or event.eventDate <= :rangeEnd) ")
     List<Event> findAllWithFilters(@Param("usersIds") List<Long> usersIds,
@@ -33,7 +33,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
            "where (:state is null or event.state = :state) " +
            "and (:text is null or lower(event.annotation) like lower(concat('%', :text, '%')) " + " " +
            " or lower(event.description) like lower(concat('%', :text, '%'))) " +
-           "and (:categoriesIds is null or event.category.id in :categoriesIds) " +
+           "and ((:categoriesIds) is null or event.category.id in (:categoriesIds)) " +
            "and (:paid is null or event.paid = :paid) " +
            "and (:rangeStart is null or event.eventDate >= :rangeStart) " +
            "and (:rangeEnd is null or event.eventDate <= :rangeEnd) " +

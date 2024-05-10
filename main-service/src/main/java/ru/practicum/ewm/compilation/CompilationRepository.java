@@ -1,4 +1,4 @@
-package ru.practicum.ewm;
+package ru.practicum.ewm.compilation;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +12,7 @@ public interface CompilationRepository extends JpaRepository<Compilation, Long> 
 
     @Query("select compilation " +
            "from Compilation compilation " +
-           "where (:pinned is null or compilation.pinned = :pinned) ")
+           "where ((:pinned) is null or compilation.pinned = (:pinned)) ")
     List<Compilation> findAllWithFilters(@Param("pinned") Boolean pinned, Pageable pageable);
 
 }
