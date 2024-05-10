@@ -23,6 +23,7 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
+    @ResponseStatus(HttpStatus.OK)
     public List<ViewStats> getStats(
             @RequestParam(required = false) @DateTimeFormat(pattern = EndpointHit.DATE_TIME_FORMAT) LocalDateTime start,
             @RequestParam(required = false) @DateTimeFormat(pattern = EndpointHit.DATE_TIME_FORMAT) LocalDateTime end,
