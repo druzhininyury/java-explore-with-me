@@ -159,7 +159,7 @@ public class RequestServiceImpl implements RequestService {
         }
 
         List<Request> requests = requestRepository.findAllByIdIn(eventRequestStatusUpdateRequest.getRequestIds());
-        List<Long> badRequest = null;
+        List<Long> badRequest = List.of();
 
         badRequest = requests.stream().filter(request -> request.getEvent().getId() != eventId)
                 .map(Request::getId).collect(Collectors.toList());
