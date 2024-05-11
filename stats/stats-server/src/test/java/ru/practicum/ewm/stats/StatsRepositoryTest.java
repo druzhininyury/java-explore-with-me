@@ -49,7 +49,7 @@ public class StatsRepositoryTest {
         List<ViewStats> expectedStats = List.of(ViewStats.builder().app("app").uri("/service-a").hits(3L).build(),
                 ViewStats.builder().app("app").uri("/service-b").hits(1L).build());
 
-        List<ViewStats> actualStats = statsRepository.getStats(start, end);
+        List<ViewStats> actualStats = statsRepository.getStatsWithFilters(start, end, null);
 
         assertThat(actualStats, equalTo(expectedStats));
     }
@@ -62,7 +62,7 @@ public class StatsRepositoryTest {
         List<ViewStats> expectedStats = List.of(ViewStats.builder().app("app").uri("/service-a").hits(2L).build(),
                 ViewStats.builder().app("app").uri("/service-b").hits(1L).build());
 
-        List<ViewStats> actualStats = statsRepository.getStatsUnique(start, end);
+        List<ViewStats> actualStats = statsRepository.getStatsUniqueWithFilters(start, end, null);
 
         assertThat(actualStats, equalTo(expectedStats));
     }
@@ -75,7 +75,7 @@ public class StatsRepositoryTest {
 
         List<ViewStats> expectedStats = List.of(ViewStats.builder().app("app").uri("/service-a").hits(3L).build());
 
-        List<ViewStats> actualStats = statsRepository.getStatsWithUris(start, end, uris);
+        List<ViewStats> actualStats = statsRepository.getStatsWithFilters(start, end, uris);
 
         assertThat(actualStats, equalTo(expectedStats));
     }
@@ -88,7 +88,7 @@ public class StatsRepositoryTest {
 
         List<ViewStats> expectedStats = List.of(ViewStats.builder().app("app").uri("/service-a").hits(2L).build());
 
-        List<ViewStats> actualStats = statsRepository.getStatsUniqueWithUris(start, end, uris);
+        List<ViewStats> actualStats = statsRepository.getStatsUniqueWithFilters(start, end, uris);
 
         assertThat(actualStats, equalTo(expectedStats));
     }

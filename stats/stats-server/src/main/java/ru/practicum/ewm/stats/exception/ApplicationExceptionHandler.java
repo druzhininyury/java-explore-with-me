@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ValidationException;
+
 @RestControllerAdvice
 @Slf4j
 public class ApplicationExceptionHandler {
@@ -15,6 +17,13 @@ public class ApplicationExceptionHandler {
     public ErrorResponse handleHasNotSavedException(EntityHasNotSavedException e) {
         log.warn(e.getMessage());
         return new ErrorResponse("Entity hasn't been saved.", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationException(ValidationException e) {
+        log.warn(e.getMessage());
+        return new ErrorResponse("Validation exception.", e.getMessage());
     }
 
 }

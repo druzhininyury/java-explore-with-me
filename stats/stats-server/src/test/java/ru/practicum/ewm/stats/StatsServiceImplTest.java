@@ -67,12 +67,12 @@ public class StatsServiceImplTest {
 
         ViewStats stats = ViewStats.builder().app("app").uri("/service").hits(10L).build();
 
-        when(statsRepository.getStats(start, end)).thenReturn(List.of(stats));
+        when(statsRepository.getStatsWithFilters(start, end, null)).thenReturn(List.of(stats));
 
         List<ViewStats> actualStatsList = statsService.getStats(start, end, null, false);
 
         assertThat(actualStatsList, equalTo(List.of(stats)));
-        verify(statsRepository).getStats(start, end);
+        verify(statsRepository).getStatsWithFilters(start, end, null);
     }
 
     @Test
@@ -82,12 +82,12 @@ public class StatsServiceImplTest {
 
         ViewStats stats = ViewStats.builder().app("app").uri("/service").hits(10L).build();
 
-        when(statsRepository.getStatsUnique(start, end)).thenReturn(List.of(stats));
+        when(statsRepository.getStatsUniqueWithFilters(start, end, null)).thenReturn(List.of(stats));
 
         List<ViewStats> actualStatsList = statsService.getStats(start, end, null, true);
 
         assertThat(actualStatsList, equalTo(List.of(stats)));
-        verify(statsRepository).getStatsUnique(start, end);
+        verify(statsRepository).getStatsUniqueWithFilters(start, end, null);
     }
 
     @Test
@@ -98,12 +98,12 @@ public class StatsServiceImplTest {
 
         ViewStats stats = ViewStats.builder().app("app").uri("/service").hits(10L).build();
 
-        when(statsRepository.getStatsWithUris(start, end, uris)).thenReturn(List.of(stats));
+        when(statsRepository.getStatsWithFilters(start, end, uris)).thenReturn(List.of(stats));
 
         List<ViewStats> actualStatsList = statsService.getStats(start, end, uris, false);
 
         assertThat(actualStatsList, equalTo(List.of(stats)));
-        verify(statsRepository).getStatsWithUris(start, end, uris);
+        verify(statsRepository).getStatsWithFilters(start, end, uris);
     }
 
     @Test
@@ -114,11 +114,11 @@ public class StatsServiceImplTest {
 
         ViewStats stats = ViewStats.builder().app("app").uri("/service").hits(10L).build();
 
-        when(statsRepository.getStatsUniqueWithUris(start, end, uris)).thenReturn(List.of(stats));
+        when(statsRepository.getStatsUniqueWithFilters(start, end, uris)).thenReturn(List.of(stats));
 
         List<ViewStats> actualStatsList = statsService.getStats(start, end, uris, true);
 
         assertThat(actualStatsList, equalTo(List.of(stats)));
-        verify(statsRepository).getStatsUniqueWithUris(start, end, uris);
+        verify(statsRepository).getStatsUniqueWithFilters(start, end, uris);
     }
 }

@@ -43,13 +43,25 @@ public class StatsClient {
         monoResponse.subscribe(endpointHit -> log.info("Hit was send: " + endpointHit));
     }
 
+    public void saveHitSync(String app, String uri, String ip, LocalDateTime timestamp) {
+        Mono<EndpointHit> monoResponse = webClient.post()
+                .uri("/hit")
+                .bodyValue(EndpointHit.builder().app(app).uri(uri).ip(ip).timestamp(timestamp).build())
+                .retrieve()
+                .bodyToMono(EndpointHit.class);
+        monoResponse.block();
+    }
+
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        String startTime = start != null ? start.format(DateTimeFormatter.ofPattern(EndpointHit.DATE_TIME_FORMAT)) : null;
+        String endTime = end != null ? end.format(DateTimeFormatter.ofPattern(EndpointHit.DATE_TIME_FORMAT)) : null;
+
         Mono<List<ViewStats>> monoResponse = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/stats")
-                        .queryParam("start", start.format(DateTimeFormatter.ofPattern(EndpointHit.DATE_TIME_FORMAT)))
-                        .queryParam("end", end.format(DateTimeFormatter.ofPattern(EndpointHit.DATE_TIME_FORMAT)))
-                        .queryParamIfPresent("uris", Optional.of(uris))
+                        .queryParamIfPresent("start", Optional.ofNullable(startTime))
+                        .queryParamIfPresent("end", Optional.ofNullable(endTime))
+                        .queryParamIfPresent("uris", Optional.ofNullable(uris))
                         .queryParam("unique", unique)
                         .build())
                 .retrieve()
