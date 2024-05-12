@@ -5,6 +5,7 @@ import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.Location;
+import ru.practicum.ewm.like.dto.LikeDto;
 import ru.practicum.ewm.user.model.User;
 
 import java.time.LocalDateTime;
@@ -43,6 +44,18 @@ public interface EventMapper {
                       LocalDateTime publishedOn);
 
     EventFullDto toEventFullDto(Event event, long views);
+
+    @Mapping(target = "rating",
+             expression = "java(getEventRating(event.getLikes(), event.getDislikes()))")
+    EventShortDto toEventShortDto(Event event);
+
+    default String getEventRating(long likes, long dislikes) {
+        long total = likes + dislikes;
+        if (total == 0) {
+            return "No likes.";
+        }
+        return LikeDto.LikesLevel.getLevel((int) (likes * 100 / total)).toString();
+    }
 
     List<EventFullDto> toEventFullDto(List<Event> events);
 
