@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class LikeServiceImpl implements LikeService{
+public class LikeServiceImpl implements LikeService {
 
     private final LikeMapper likeMapper;
 
