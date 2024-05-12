@@ -53,6 +53,14 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "where event.id = :eventId ")
     void incrementConfirmedRequests(@Param("eventId") long eventId, @Param("amount") long amount);
 
+    @Modifying
+    @Query("update Event event " +
+           "set event.likes = event.likes + :likesAmount, event.dislikes = event.dislikes + :dislikesAmount " +
+           "where event.id = :eventId ")
+    void incrementLikesAndDislikes(@Param("eventId") long eventId,
+                                   @Param("likesAmount") long likesAmount,
+                                   @Param("dislikesAmount") long dislikesAmount);
+
     boolean existsAllByIdIn(List<Long> eventIds);
 
 }
