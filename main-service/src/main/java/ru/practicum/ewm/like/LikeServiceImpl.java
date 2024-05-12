@@ -48,7 +48,7 @@ public class LikeServiceImpl implements LikeService {
         }
 
         if (!event.getState().equals(Event.State.PUBLISHED)) {
-            throw new ConditionsException("Can't like event(id" + eventId + ") because it is not published.");
+            throw new ConditionsException("Can't like event(id=" + eventId + ") because it is not published.");
         }
 
         if (event.getInitiator().getId() == userId) {
