@@ -48,12 +48,18 @@ public class Event {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "dislikes", nullable = false)
+    private long dislikes;
+
     @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;
 
     @JoinColumn(name = "initiator_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private User initiator;
+
+    @Column(name = "likes", nullable = false)
+    private long likes;
 
     @JoinColumn(name = "location_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
